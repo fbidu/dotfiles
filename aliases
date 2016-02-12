@@ -1,0 +1,56 @@
+# Aliases for listing directories
+alias ls="ls -lh --color=auto"
+alias ll="ls -lah"
+
+# Aliases that act as shortcuts to directories
+alias www="cd /var/www/html"
+alias et="cd ~/Etudes"
+alias tmp="cd /tmp"
+
+# Aliases for package management
+alias update="sudo aptitude update && sudo aptitude safe-upgrade -y"
+alias updated="sudo aptitude update && sudo aptitude full-upgrade -y"
+alias install="sudo aptitude install -y"
+alias search="aptitude search"
+
+# Aliases for lazy directory browsing
+alias cd..="cd .."
+alias ..="cd .."
+alias .2="cd ../../"
+alias .3="cd ../../../"
+
+# Artisan alises
+alias art="php artisan"
+    # Migration aliases
+    alias aminst="art migrate:install"
+    alias amig="art migrate -vv"
+    alias amir="art migrate:rollback -vv"
+    alias amish="art migrate:refresh"
+
+    # Make aliases
+    alias amkc="art make:controller"
+    
+    # DB aliases
+    alias aseed="art db:seed -vv"
+    
+    # Aliases that are not compatible with HHVM
+    alias tinker="php artisan tinker" 
+    alias serve="php artisan serve"
+
+# Composer Aliases HHVM required!
+alias composer="hhvm /usr/local/bin/composer"
+alias cupdate="composer update"
+alias cload="composer dumpautoload"
+alias creq="composer require"
+
+# Git aliases
+alias gicl="git clone"
+alias gis="git status"
+alias gia="git add"
+alias gib="git branch"
+alias gim="git merge"
+alias gic="git commit"
+alias gid="git diff"
+
+# Command line sugar
+alias catn="cat -n"
