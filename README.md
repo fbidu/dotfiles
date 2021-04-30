@@ -14,9 +14,9 @@
   * [x] Python 2.x
 * [x] Install docker
   * [x] Add user to `docker` group
-* [ ] Install docker-compose
+* [x] Install docker-compose
 * [x] Install aliases
-* [ ] Install DLSR as webcam drivers
+* [x] Install DLSR as webcam drivers
 * [ ] Setup git
 * [ ] Setup ssh keys
 * [ ] Install key-mapper and my settings

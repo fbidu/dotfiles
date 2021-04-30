@@ -1,3 +1,4 @@
+from datetime import datetime, time
 from functools import partial
 import logging
 import platform
@@ -34,23 +35,49 @@ UBUNTU_CODENAME = (
 if platform.system() != "Linux" or platform.machine() != "x86_64":
     raise RuntimeError("This code is for x86_64 Linux systems only")
 
-sys_update = lambda: subprocess.run(["sudo", PKG_MANAGER, "update"])
-sys_upgrade = lambda: subprocess.run(["sudo", PKG_MANAGER, "full-upgrade", "-y"])
+timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
+sys_update = lambda: subprocess.run(
+    ["sudo", PKG_MANAGER, "update"],
+    stdout=open(f"logs/{timestamp()}-update.log", "w"),
+    stderr=subprocess.STDOUT,
+)
+sys_upgrade = lambda: subprocess.run(
+    ["sudo", PKG_MANAGER, "full-upgrade", "-y"],
+    stdout=open(f"logs/{timestamp()}-upgrade.log", "w"),
+    stderr=subprocess.STDOUT,
+)
 runsh = partial(subprocess.run, shell=True)
 
 
 def install(*args):
+    """
+    Installs any number of packages through `PKG_MANAGER`
+
+    >>> install("git", "make")
+    """
     logging.info(f"Installing {', '.join(args)}")
     subprocess.run(["sudo", PKG_MANAGER, "install", *args, "-y"])
 
 
 def install_fonts():
+    """
+    Install Nerd Fonts I like. See https://github.com/ryanoasis/nerd-fonts.
+    This function will also set Source Code Pro 15 as Gnome Terminal's font.
+
+    Currently it install FiraCode, Mesl L and Source Code Pro.
+    """
     fonts = (
         "FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf",
         "Meslo/L/Regular/complete/Meslo%20LG%20L%20Regular%20Nerd%20Font%20Complete.ttf",
         "SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf",
     )
     nerd_fonts_url = "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/"
+    gterminal_profile = (
+        "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
+    )
+    default_font = "SauceCodePro Nerd Font 15"
+
+    # Init local font dir
     runsh("mkdir ~/.local/share/fonts")
 
     for font in fonts:
@@ -59,11 +86,23 @@ def install_fonts():
         runsh(f"wget -nc {url} -P ~/.local/share/fonts")
         logging.info(f"Font {font} installed")
 
+    # Update system font cache
     runsh("fc-cache -f -v")
     logging.info("All fonts installed")
+    runsh(f"dconf write {gterminal_profile}/font \"'{default_font}'\"")
+    runsh(f"dconf write {gterminal_profile}/use-system-font false")
 
 
 def zsh_setup():
+    """
+    Setups my shell. In details this function:
+        * Installs zsh and oh-my-zsh
+        * Install my current fav theme, powerlevel10k
+        * Installs the ausuggestions and syntax highlighting plugins
+        * Installs fzf, needed for the fuzzy finder built in plugin
+        * Symlink zshrc to ~/.zshrc
+        * Change the user's default shell to zsh
+    """
     zsh_installer = (
         "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
     )
@@ -74,26 +113,25 @@ def zsh_setup():
         "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
     }
 
-    gterminal_profile = (
-        "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
-    )
-    default_font = "SauceCodePro Nerd Font 15"
-    install("zsh")
-    install("fzf")
+    install("zsh, fzf")
+    logging.info("Installing zsh")
     runsh(f'sh -c "$(curl -fsSL {zsh_installer})" "" --unattended')
 
     for path, url in plugins.items():
+        logging.info(f"Installing {path}")
         runsh(
             f"git clone --depth=1 {url} ${{ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}}{path}"
         )
 
     runsh("ln -sfn ~/dotfiles/zshrc ~/.zshrc")
-    runsh(f"dconf write {gterminal_profile}/font \"'{default_font}'\"")
-    runsh(f"dconf write {gterminal_profile}/use-system-font false")
     runsh("chsh -s $(which zsh)")
+    logging.info("zsh installed")
 
 
 def pyenv_setup():
+    """
+    Install pyenv, Python 3.9.1 and Python 2.7.18 as global versions.
+    """
     python_build_deps = (
         "build-essential",
         "libssl-dev",
@@ -121,6 +159,10 @@ def pyenv_setup():
 
 
 def docker_setup():
+    """
+    Install docker, docker-compose and add
+    the current user to the `docker` group
+    """
     docker_deps = (
         "apt-transport-https",
         "ca-certificates",
@@ -143,6 +185,18 @@ def docker_setup():
     runsh("sudo usermod -aG docker $USER")
     runsh(f"sudo curl -L {docker_compose_url} -o /usr/local/bin/docker-compose")
     runsh("sudo chmod +x /usr/local/bin/docker-compose")
+
+
+def dslr_setup():
+    """
+    Install gphoto2, v4l2loopback-utils and ffmpeg, needed for the `cam` alias to work.
+    This is needed in order to use a DSLR cam on linux.
+
+    See:
+    https://medium.com/nerdery/dslr-webcam-setup-for-linux-9b6d1b79ae22
+    https://askubuntu.com/questions/856460/using-a-digital-camera-canon-as-webcam
+    """
+    install("gphoto2", "ffmpeg", "v4l2loopback-utils")
 
 
 sys_update()
