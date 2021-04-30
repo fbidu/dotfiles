@@ -13,7 +13,7 @@
   * [x] Python 3.9
   * [x] Python 2.x
 * [x] Install docker
-  * [ ] Add user to `docker` group
+  * [x] Add user to `docker` group
 * [ ] Install docker-compose
 * [x] Install aliases
 * [ ] Install DLSR as webcam drivers

@@ -131,6 +131,7 @@ def docker_setup():
     docker_key = "https://download.docker.com/linux/ubuntu/gpg"
     docker_keyring = "/usr/share/keyrings/docker-archive-keyring.gpg"
     docker_repo_list = "/etc/apt/sources.list.d/docker.list"
+    docker_compose_url = "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64"
     install(*docker_deps)
     runsh(f"curl -fsSL {docker_key} | sudo gpg --dearmor -o {docker_keyring}")
     runsh(
@@ -139,6 +140,9 @@ def docker_setup():
     )
     sys_update()
     install("docker-ce", "docker-ce-cli", "containerd.io")
+    runsh("sudo usermod -aG docker $USER")
+    runsh(f"sudo curl -L {docker_compose_url} -o /usr/local/bin/docker-compose")
+    runsh("sudo chmod +x /usr/local/bin/docker-compose")
 
 
 sys_update()
