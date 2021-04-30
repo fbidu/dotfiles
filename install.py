@@ -90,6 +90,7 @@ def zsh_setup():
     runsh("ln -sfn ~/dotfiles/zshrc ~/.zshrc")
     runsh(f"dconf write {gterminal_profile}/font \"'{default_font}'\"")
     runsh(f"dconf write {gterminal_profile}/use-system-font false")
+    runsh("chsh -s $(which zsh)")
 
 
 def pyenv_setup():
@@ -112,6 +113,32 @@ def pyenv_setup():
         "python-openssl",
     )
     install(*python_build_deps)
+    runsh("git clone https://github.com/pyenv/pyenv.git ~/.pyenv")
+    runsh("cd ~/.pyenv && src/configure && make -C src")
+    runsh("pyenv install 3.9.1 -s")
+    runsh("pyenv install 2.7.18 -s")
+    runsh("pyenv global 3.9.1 2.7.18")
+
+
+def docker_setup():
+    docker_deps = (
+        "apt-transport-https",
+        "ca-certificates",
+        "curl",
+        "gnupg",
+        "lsb-release",
+    )
+    docker_key = "https://download.docker.com/linux/ubuntu/gpg"
+    docker_keyring = "/usr/share/keyrings/docker-archive-keyring.gpg"
+    docker_repo_list = "/etc/apt/sources.list.d/docker.list"
+    install(*docker_deps)
+    runsh(f"curl -fsSL {docker_key} | sudo gpg --dearmor -o {docker_keyring}")
+    runsh(
+        f"""echo "deb [arch=amd64 signed-by={docker_keyring}] https://download.docker.com/linux/ubuntu \
+        {UBUNTU_CODENAME} stable" | sudo tee {docker_repo_list}  > /dev/null"""
+    )
+    sys_update()
+    install("docker-ce", "docker-ce-cli", "containerd.io")
 
 
 sys_update()
@@ -120,3 +147,4 @@ install("git")
 install_fonts()
 zsh_setup()
 pyenv_setup()
+docker_setup()

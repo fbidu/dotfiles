@@ -9,10 +9,10 @@
 * [x] Install oh-my-zsh
 * [x] Install powerline patched fonts
 * [x] Install omzsh plugins
-* [ ] Setup pyenv
-  * [ ] Python 3.9
-  * [ ] Python 2.x
-* [ ] Install docker
+* [x] Setup pyenv
+  * [x] Python 3.9
+  * [x] Python 2.x
+* [x] Install docker
   * [ ] Add user to `docker` group
 * [ ] Install docker-compose
 * [x] Install aliases
