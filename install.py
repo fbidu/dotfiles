@@ -80,9 +80,11 @@ def zsh_setup():
 
     for path, url in plugins.items():
         subprocess.run(
-            f"git clone --depth=1 {url} ${{ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}}{path}",
+            f"git clone --depth=1 {url} ${{ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}}{path}",
             shell=True,
         )
+
+    subprocess.run("ln -sfn ~/dotfiles/zshrc ~/.zshrc", shell=True)
 
 
 def pyenv_setup():
@@ -110,5 +112,6 @@ def pyenv_setup():
 sys_update()
 sys_upgrade()
 install("git")
+install_fonts()
 zsh_setup()
 pyenv_setup()
