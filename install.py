@@ -71,6 +71,9 @@ def zsh_setup():
         "plugins/zsh-autosuggestions": "https://github.com/zsh-users/zsh-autosuggestions",
         "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
     }
+
+    gnome_terminal_conf = "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font"
+    default_font = "SauceCodePro Nerd Font 15"
     install("zsh")
     install("fzf")
     subprocess.run(
@@ -85,6 +88,10 @@ def zsh_setup():
         )
 
     subprocess.run("ln -sfn ~/dotfiles/zshrc ~/.zshrc", shell=True)
+    subprocess.run(
+        f"dconf write {gnome_terminal_conf} \"'{default_font}'\"",
+        shell=True,
+    )
 
 
 def pyenv_setup():
