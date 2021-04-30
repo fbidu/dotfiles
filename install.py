@@ -36,27 +36,39 @@ if platform.system() != "Linux" or platform.machine() != "x86_64":
     raise RuntimeError("This code is for x86_64 Linux systems only")
 
 timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
-sys_update = lambda: subprocess.run(
-    ["sudo", PKG_MANAGER, "update"],
-    stdout=open(f"logs/{timestamp()}-update.log", "w"),
-    stderr=subprocess.STDOUT,
-)
-sys_upgrade = lambda: subprocess.run(
-    ["sudo", PKG_MANAGER, "full-upgrade", "-y"],
-    stdout=open(f"logs/{timestamp()}-upgrade.log", "w"),
-    stderr=subprocess.STDOUT,
-)
-runsh = partial(subprocess.run, shell=True)
 
 
-def install(*args):
+def package_cmd(command, *args):
     """
-    Installs any number of packages through `PKG_MANAGER`
-
-    >>> install("git", "make")
+    Runs an `PKG_MANAGER` with an arbitrary `command` and any number of
+    `args`, redirecting STDOUT and STDER to `logs/{timestamp}-{command}.log`
+    and logs an error in case the command exists with failure
     """
-    logging.info(f"Installing {', '.join(args)}")
-    subprocess.run(["sudo", PKG_MANAGER, "install", *args, "-y"])
+    logfile = f"logs/{timestamp()}-{command}.log"
+
+    logging.info(f"Running {PKG_MANAGER} {command} {', '.join(*args)}")
+
+    response = subprocess.run(
+        ["sudo", PKG_MANAGER, command, *args, "-y"],
+        stdout=open(logfile, "w"),
+        stderr=subprocess.STDOUT,
+    )
+
+    if response.returncode != 0:
+        logging.error(
+            f"Package management command '{command}' failed. See logs/{logfile} for details."
+        )
+
+
+install = lambda *args: package_cmd("install", *args)
+sys_update = lambda: package_cmd("update")
+sys_upgrade = lambda: package_cmd("dist-upgrade")
+
+
+def runsh(*args, **kwargs):
+    response = subprocess.run(*args, **kwargs, shell=True)
+    if response.returncode != 0:
+        logging.error(f"Shell command errored. Args: {', '.join(args)}")
 
 
 def install_fonts():
@@ -206,3 +218,4 @@ install_fonts()
 zsh_setup()
 pyenv_setup()
 docker_setup()
+dslr_setup()
