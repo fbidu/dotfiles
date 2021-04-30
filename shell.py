@@ -38,7 +38,8 @@ sys_update = lambda: package_cmd("update")
 sys_upgrade = lambda: package_cmd("dist-upgrade")
 
 
-def runsh(*args, **kwargs):
+def runsh(*args, suppress=False, **kwargs):
     response = subprocess.run(*args, **kwargs, shell=True)
-    if response.returncode != 0:
+    if response.returncode != 0 and not suppress:
         logging.error(f"Shell command errored. Args: {', '.join(args)}")
+    return response

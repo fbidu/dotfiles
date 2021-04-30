@@ -5,10 +5,9 @@ import platform
 import subprocess
 
 import checkers
-from shell import install, sys_update, sys_upgrade, runsh 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO
-)
+from shell import install, sys_update, sys_upgrade, runsh
+
+logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
 PKG_MANAGER = "aptitude"
 
@@ -36,6 +35,7 @@ UBUNTU_CODENAME = (
 
 if platform.system() != "Linux" or platform.machine() != "x86_64":
     raise RuntimeError("This code is for x86_64 Linux systems only")
+
 
 def install_fonts():
     """
@@ -193,7 +193,6 @@ def git_setup():
     email = input("Email for git: ")
     runsh(f"git config --global user.name {name}")
     runsh(f"git config --global user.email {email}")
-    
 
 
 def keymapper_setup():
@@ -202,12 +201,12 @@ def keymapper_setup():
     runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
     runsh("ln -sfn ~/dotfiles/key-mapper ~/.config/key-mapper")
 
+
 def vscode_setup():
-    url = "https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
-    extensions = {
-        "ms-python.python",
-        "ms-toolsai.jupyter"
-    }
+    url = (
+        "https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
+    )
+    extensions = {"ms-python.python", "ms-toolsai.jupyter"}
     to_install = extensions - checkers.installed_vscode_extensions()
 
     if not checkers.command_available("code"):
@@ -217,6 +216,15 @@ def vscode_setup():
     for extension in extensions:
         logging.info(f"Installing vscode extension {extension}")
         runsh(f"code --install-extension {extension}")
+
+
+def python_setup():
+    to_install = {"black"}
+
+    for package in to_install:
+        if checkers.command_available(package):
+            logging.info(f"Skipping {package} installation")
+        runsh(f"pip install --user {package}")
 
 
 if __name__ == "__main__":
@@ -231,3 +239,4 @@ if __name__ == "__main__":
     git_setup()
     keymapper_setup()
     vscode_setup()
+    python_setup()
