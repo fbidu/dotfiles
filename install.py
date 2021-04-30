@@ -5,7 +5,7 @@ import platform
 import subprocess
 
 logging.basicConfig(
-    format="%(asctime)s %(levelname)s: %(message)s", level=logging.DEBUG
+    format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO
 )
 
 PKG_MANAGER = "aptitude"
@@ -46,7 +46,7 @@ def package_cmd(command, *args):
     """
     logfile = f"logs/{timestamp()}-{command}.log"
 
-    log_args = ", ".join(*args) if args else ""
+    log_args = ", ".join(args) if args else ""
 
     logging.info(f"Running {PKG_MANAGER} {command} {log_args}")
 
@@ -117,7 +117,7 @@ def zsh_setup():
         * Symlink zshrc to ~/.zshrc
         * Change the user's default shell to zsh
     """
-    zsh_installer = (
+    ohmyzsh_installer = (
         "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
     )
 
@@ -127,9 +127,9 @@ def zsh_setup():
         "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
     }
 
-    install("zsh, fzf")
-    logging.info("Installing zsh")
-    runsh(f'sh -c "$(curl -fsSL {zsh_installer})" "" --unattended')
+    install("zsh", "fzf")
+    logging.info("Installing oh-my-zsh")
+    runsh(f'sh -c "$(curl -fsSL {ohmyzsh_installer})" "" --unattended')
 
     for path, url in plugins.items():
         logging.info(f"Installing {path}")
@@ -214,27 +214,29 @@ def dslr_setup():
 
 
 def git_setup():
+    runsh("ln -sfn ~/dotfiles/git/gitconfig ~/.gitconfig")
     name = input("Full name for git: ")
     email = input("Email for git: ")
     runsh(f"git config --global user.name {name}")
     runsh(f"git config --global user.email {email}")
-    runsh("ln -sfn ~/git/gitconfig ~/.gitconfig")
+    
 
 
 def keymapper_setup():
     url = "https://github.com/sezanzeb/key-mapper/releases/download/0.8.1/key-mapper-0.8.1.deb"
-    runsh(f"wget {url} -P /tmp")
+    runsh(f"wget -nc {url} -P /tmp")
     runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
-    runsh("ln -sfn ~/key-mapper ~/.config/key-mapper")
+    runsh("ln -sfn ~/dotfiles/key-mapper ~/.config/key-mapper")
 
 
-sys_update()
-sys_upgrade()
-install("git")
-install_fonts()
-zsh_setup()
-pyenv_setup()
-docker_setup()
-dslr_setup()
-git_setup()
-keymapper_setup()
+if __name__ == "__main__":
+    sys_update()
+    sys_upgrade()
+    install("git")
+    install_fonts()
+    zsh_setup()
+    pyenv_setup()
+    docker_setup()
+    dslr_setup()
+    git_setup()
+    keymapper_setup()
