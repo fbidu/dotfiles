@@ -4,6 +4,8 @@ import logging
 import platform
 import subprocess
 
+import .checkers
+
 logging.basicConfig(
     format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO
 )
@@ -126,10 +128,19 @@ def zsh_setup():
         "plugins/zsh-autosuggestions": "https://github.com/zsh-users/zsh-autosuggestions",
         "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
     }
+    deps = []
 
-    install("zsh", "fzf")
-    logging.info("Installing oh-my-zsh")
-    runsh(f'sh -c "$(curl -fsSL {ohmyzsh_installer})" "" --unattended')
+    if not checker.command_available("zsh"):
+        deps.append("zsh")
+    if not checker.command_available("fzf"):
+        deps.append("fzf")
+
+    install(*deps)
+    if not checkers.path_exists("~/.oh-my-zsh"):
+        logging.info("Installing oh-my-zsh")
+        runsh(f'sh -c "$(curl -fsSL {ohmyzsh_installer})" "" --unattended')
+    else:
+        logging.info("oh-my-zsh already exists. Skipping")
 
     for path, url in plugins.items():
         logging.info(f"Installing {path}")
@@ -138,7 +149,8 @@ def zsh_setup():
         )
 
     runsh("ln -sfn ~/dotfiles/zshrc ~/.zshrc")
-    runsh("chsh -s $(which zsh)")
+    if not checkers.user_shell_is("/usr/bin/zsh"):
+        runsh("chsh -s $(which zsh)")
     logging.info("zsh installed")
 
 
