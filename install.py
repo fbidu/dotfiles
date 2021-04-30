@@ -1,3 +1,4 @@
+from functools import partial
 import logging
 import platform
 import subprocess
@@ -35,6 +36,7 @@ if platform.system() != "Linux" or platform.machine() != "x86_64":
 
 sys_update = lambda: subprocess.run(["sudo", PKG_MANAGER, "update"])
 sys_upgrade = lambda: subprocess.run(["sudo", PKG_MANAGER, "full-upgrade", "-y"])
+runsh = partial(subprocess.run, shell=True)
 
 
 def install(*args):
@@ -49,15 +51,15 @@ def install_fonts():
         "SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf",
     )
     nerd_fonts_url = "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/"
-    subprocess.run("mkdir ~/.local/share/fonts", shell=True)
+    runsh("mkdir ~/.local/share/fonts")
 
     for font in fonts:
         url = f"{nerd_fonts_url}{font}"
         logging.info(f"Downloading {font.split('/')[0]}")
-        subprocess.run(f"wget -nc {url} -P ~/.local/share/fonts", shell=True)
+        runsh(f"wget -nc {url} -P ~/.local/share/fonts")
         logging.info(f"Font {font} installed")
 
-    subprocess.run("fc-cache -f -v", shell=True)
+    runsh("fc-cache -f -v")
     logging.info("All fonts installed")
 
 
@@ -78,26 +80,16 @@ def zsh_setup():
     default_font = "SauceCodePro Nerd Font 15"
     install("zsh")
     install("fzf")
-    subprocess.run(
-        f'sh -c "$(curl -fsSL {zsh_installer})" "" --unattended',
-        shell=True,
-    )
+    runsh(f'sh -c "$(curl -fsSL {zsh_installer})" "" --unattended')
 
     for path, url in plugins.items():
-        subprocess.run(
-            f"git clone --depth=1 {url} ${{ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}}{path}",
-            shell=True,
+        runsh(
+            f"git clone --depth=1 {url} ${{ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}}{path}"
         )
 
-    subprocess.run("ln -sfn ~/dotfiles/zshrc ~/.zshrc", shell=True)
-    subprocess.run(
-        f"dconf write {gterminal_profile}/font \"'{default_font}'\"",
-        shell=True,
-    )
-    subprocess.run(
-        f"dconf write {gterminal_profile}/use-system-font false",
-        shell=True,
-    )
+    runsh("ln -sfn ~/dotfiles/zshrc ~/.zshrc")
+    runsh(f"dconf write {gterminal_profile}/font \"'{default_font}'\"")
+    runsh(f"dconf write {gterminal_profile}/use-system-font false")
 
 
 def pyenv_setup():
