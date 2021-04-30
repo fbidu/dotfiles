@@ -18,4 +18,4 @@
 * [x] Install aliases
 * [x] Install DLSR as webcam drivers
 * [x] Setup git
-* [ ] Install key-mapper and my settings
+* [x] Install key-mapper and my settings

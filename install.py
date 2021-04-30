@@ -218,6 +218,14 @@ def git_setup():
     runsh(f"git config --global user.email {email}")
     runsh("ln -sfn ~/git/gitconfig ~/.gitconfig")
 
+
+def keymapper_setup():
+    url = "https://github.com/sezanzeb/key-mapper/releases/download/0.8.1/key-mapper-0.8.1.deb"
+    runsh(f"wget {url} -P /tmp")
+    runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
+    runsh("ln -sfn ~/key-mapper ~/.config/key-mapper")
+
+
 sys_update()
 sys_upgrade()
 install("git")
@@ -226,3 +234,5 @@ zsh_setup()
 pyenv_setup()
 docker_setup()
 dslr_setup()
+git_setup()
+keymapper_setup()
