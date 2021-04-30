@@ -2,7 +2,9 @@ import logging
 import platform
 import subprocess
 
-logging.basicConfig()
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s: %(message)s", level=logging.DEBUG
+)
 
 PKG_MANAGER = "aptitude"
 
@@ -14,6 +16,7 @@ ON_MINT = (
 
 if not ON_MINT:
     logging.warning("Not on Linux Mint! Some functions may not work")
+
 # Linux Mint's Ubuntu Upstream
 UBUNTU_CODENAME = (
     subprocess.check_output(
@@ -32,7 +35,28 @@ if platform.system() != "Linux" or platform.machine() != "x86_64":
 
 sys_update = lambda: subprocess.run(["sudo", PKG_MANAGER, "update"])
 sys_upgrade = lambda: subprocess.run(["sudo", PKG_MANAGER, "full-upgrade", "-y"])
-install = lambda *args: subprocess.run(["sudo", PKG_MANAGER, "install", *args, "-y"])
+
+
+def install(*args):
+    logging.info(f"Installing {', '.join(args)}")
+    subprocess.run(["sudo", PKG_MANAGER, "install", *args, "-y"])
+
+
+def install_fonts():
+    nerd_fonts_url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/"
+    fonts = ("Meslo", "FiraCode", "VictorMono", "SourceCodePro")
+    subprocess.run("mkdir ~/.local/share/fonts", shell=True)
+
+    for font in fonts:
+        url = f"{nerd_fonts_url}{font}.zip"
+        logging.info(f"Downloading {font}")
+        subprocess.run(["wget", url, "-P", "/tmp"])
+        logging.info(f"Extracting {font}")
+        subprocess.run(f"unzip -uo /tmp/{font}.zip -d ~/.local/share/fonts", shell=True)
+        logging.info(f"Font {font} installed")
+
+    subprocess.run("fc-cache -f -v", shell=True)
+    logging.info("All fonts installed")
 
 
 def zsh_setup():
@@ -67,7 +91,10 @@ def pyenv_setup():
         "libbz2-dev",
         "libreadline-dev",
         "libsqlite3-dev",
-        "wget," "curl," "llvm," "libncurses5-dev",
+        "wget",
+        "curl",
+        "llvm",
+        "libncurses5-dev",
         "libncursesw5-dev",
         "xz-utils",
         "tk-dev",
@@ -82,3 +109,4 @@ sys_update()
 sys_upgrade()
 install("git")
 zsh_setup()
+pyenv_setup()
