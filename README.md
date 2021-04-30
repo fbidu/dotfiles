@@ -17,6 +17,5 @@
 * [x] Install docker-compose
 * [x] Install aliases
 * [x] Install DLSR as webcam drivers
-* [ ] Setup git
-* [ ] Setup ssh keys
+* [x] Setup git
 * [ ] Install key-mapper and my settings

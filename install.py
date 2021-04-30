@@ -211,6 +211,13 @@ def dslr_setup():
     install("gphoto2", "ffmpeg", "v4l2loopback-utils")
 
 
+def git_setup():
+    name = input("Full name for git: ")
+    email = input("Email for git: ")
+    runsh(f"git config --global user.name {name}")
+    runsh(f"git config --global user.email {email}")
+    runsh("ln -sfn ~/git/gitconfig ~/.gitconfig")
+
 sys_update()
 sys_upgrade()
 install("git")

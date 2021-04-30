@@ -1,0 +1,17 @@
+[alias]
+fap = fetch --all --prune
+
+[default]
+editor = vim
+
+[core]
+editor = vim
+
+[difftool]
+prompt = false
+
+[mergetool]
+prompt = false
+
+[push]
+default = current
