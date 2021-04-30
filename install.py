@@ -46,7 +46,9 @@ def package_cmd(command, *args):
     """
     logfile = f"logs/{timestamp()}-{command}.log"
 
-    logging.info(f"Running {PKG_MANAGER} {command} {', '.join(*args)}")
+    log_args = ", ".join(*args) if args else ""
+
+    logging.info(f"Running {PKG_MANAGER} {command} {log_args}")
 
     response = subprocess.run(
         ["sudo", PKG_MANAGER, command, *args, "-y"],
