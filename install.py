@@ -43,16 +43,18 @@ def install(*args):
 
 
 def install_fonts():
-    nerd_fonts_url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/"
-    fonts = ("Meslo", "FiraCode", "VictorMono", "SourceCodePro")
+    fonts = (
+        "FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf",
+        "Meslo/L/Regular/complete/Meslo%20LG%20L%20Regular%20Nerd%20Font%20Complete.ttf",
+        "SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf",
+    )
+    nerd_fonts_url = "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/"
     subprocess.run("mkdir ~/.local/share/fonts", shell=True)
 
     for font in fonts:
-        url = f"{nerd_fonts_url}{font}.zip"
-        logging.info(f"Downloading {font}")
-        subprocess.run(["wget", url, "-P", "/tmp"])
-        logging.info(f"Extracting {font}")
-        subprocess.run(f"unzip -uo /tmp/{font}.zip -d ~/.local/share/fonts", shell=True)
+        url = f"{nerd_fonts_url}{font}"
+        logging.info(f"Downloading {font.split('/')[0]}")
+        subprocess.run(f"wget -nc {url} -P ~/.local/share/fonts", shell=True)
         logging.info(f"Font {font} installed")
 
     subprocess.run("fc-cache -f -v", shell=True)
