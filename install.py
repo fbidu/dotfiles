@@ -72,7 +72,9 @@ def zsh_setup():
         "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
     }
 
-    gnome_terminal_conf = "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font"
+    gterminal_profile = (
+        "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
+    )
     default_font = "SauceCodePro Nerd Font 15"
     install("zsh")
     install("fzf")
@@ -89,7 +91,11 @@ def zsh_setup():
 
     subprocess.run("ln -sfn ~/dotfiles/zshrc ~/.zshrc", shell=True)
     subprocess.run(
-        f"dconf write {gnome_terminal_conf} \"'{default_font}'\"",
+        f"dconf write {gterminal_profile}/font \"'{default_font}'\"",
+        shell=True,
+    )
+    subprocess.run(
+        f"dconf write {gterminal_profile}/use-system-font false",
         shell=True,
     )
 
