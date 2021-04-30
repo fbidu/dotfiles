@@ -4,8 +4,8 @@ import logging
 import platform
 import subprocess
 
-import .checkers
-
+import checkers
+from shell import install, sys_update, sys_upgrade, runsh 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO
 )
@@ -36,44 +36,6 @@ UBUNTU_CODENAME = (
 
 if platform.system() != "Linux" or platform.machine() != "x86_64":
     raise RuntimeError("This code is for x86_64 Linux systems only")
-
-timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
-
-
-def package_cmd(command, *args):
-    """
-    Runs an `PKG_MANAGER` with an arbitrary `command` and any number of
-    `args`, redirecting STDOUT and STDER to `logs/{timestamp}-{command}.log`
-    and logs an error in case the command exists with failure
-    """
-    logfile = f"logs/{timestamp()}-{command}.log"
-
-    log_args = ", ".join(args) if args else ""
-
-    logging.info(f"Running {PKG_MANAGER} {command} {log_args}")
-
-    response = subprocess.run(
-        ["sudo", PKG_MANAGER, command, *args, "-y"],
-        stdout=open(logfile, "w"),
-        stderr=subprocess.STDOUT,
-    )
-
-    if response.returncode != 0:
-        logging.error(
-            f"Package management command '{command}' failed. See logs/{logfile} for details."
-        )
-
-
-install = lambda *args: package_cmd("install", *args)
-sys_update = lambda: package_cmd("update")
-sys_upgrade = lambda: package_cmd("dist-upgrade")
-
-
-def runsh(*args, **kwargs):
-    response = subprocess.run(*args, **kwargs, shell=True)
-    if response.returncode != 0:
-        logging.error(f"Shell command errored. Args: {', '.join(args)}")
-
 
 def install_fonts():
     """
@@ -240,6 +202,22 @@ def keymapper_setup():
     runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
     runsh("ln -sfn ~/dotfiles/key-mapper ~/.config/key-mapper")
 
+def vscode_setup():
+    url = "https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
+    extensions = {
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+    }
+    to_install = extensions - checkers.installed_vscode_extensions()
+
+    if not checkers.command_available("code"):
+        runsh(f"wget -nc --trust-server-names {url} -P /tmp")
+        runsh("sudo gdebi /tmp/code_*_amd64.deb -n")
+
+    for extension in extensions:
+        logging.info(f"Installing vscode extension {extension}")
+        runsh(f"code --install-extension {extension}")
+
 
 if __name__ == "__main__":
     sys_update()
@@ -252,3 +230,4 @@ if __name__ == "__main__":
     dslr_setup()
     git_setup()
     keymapper_setup()
+    vscode_setup()
