@@ -5,7 +5,7 @@ import platform
 import subprocess
 
 import checkers
-from shell import install, sys_update, sys_upgrade, runsh
+from shell import install, set_dconf_key, sys_update, sys_upgrade, runsh
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
@@ -67,8 +67,9 @@ def install_fonts():
     # Update system font cache
     runsh("fc-cache -f -v")
     logging.info("All fonts installed")
-    runsh(f"dconf write {gterminal_profile}/font \"'{default_font}'\"")
-    runsh(f"dconf write {gterminal_profile}/use-system-font false")
+    set_dconf_key(f"{gterminal_profile}/font", f"\"'{default_font}'\"")
+
+    set_dconf_key(f"{gterminal_profile}/use-system-font", "false")
 
 
 def zsh_setup():
@@ -92,9 +93,9 @@ def zsh_setup():
     }
     deps = []
 
-    if not checker.command_available("zsh"):
+    if not checkers.command_available("zsh"):
         deps.append("zsh")
-    if not checker.command_available("fzf"):
+    if not checkers.command_available("fzf"):
         deps.append("fzf")
 
     install(*deps)
@@ -257,6 +258,10 @@ def python_setup():
         runsh(f"pip install --user {package}")
 
 
+def cinnamon_setup():
+    set_dconf_key("/org/cinnamon/desktop/wm/preferences/focus-mode", "\"'sloppy'\"")
+
+
 if __name__ == "__main__":
     sys_update()
     sys_upgrade()
@@ -270,3 +275,4 @@ if __name__ == "__main__":
     keymapper_setup()
     vscode_setup()
     python_setup()
+    cinnamon_setup()

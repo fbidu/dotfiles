@@ -43,3 +43,15 @@ def runsh(*args, suppress=False, **kwargs):
     if response.returncode != 0 and not suppress:
         logging.error(f"Shell command errored. Args: {', '.join(args)}")
     return response
+
+
+def set_dconf_key(key, value):
+    """
+    Writes a key to dconf storage
+
+    :param key: key to be written
+    :type key: str
+    :param value: value to be written - keep in mind of "GVariant" format
+    :type value: str
+    """
+    runsh(f"dconf write {key} {value}")
