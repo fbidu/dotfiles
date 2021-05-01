@@ -227,6 +227,7 @@ def vscode_setup():
         "njpwerner.autodocstring",
         "pkief.material-icon-theme",
         "redhat.vscode-yaml",
+        "richie5um2.vscode-sort-json",
         "tamasfe.even-better-toml",
         "techer.open-in-browser",
         "vscode-icons-team.vscode-icons",

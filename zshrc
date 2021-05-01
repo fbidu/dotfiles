@@ -86,3 +86,5 @@ source $ZSH/oh-my-zsh.sh
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#93A1A1"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export PATH="$HOME/.poetry/bin:$PATH"
