@@ -1,6 +1,5 @@
-from datetime import datetime, time
-from functools import partial
 import logging
+from pathlib import Path
 import platform
 import subprocess
 
@@ -188,10 +187,12 @@ def dslr_setup():
 
 def git_setup():
     runsh("ln -sfn ~/dotfiles/git/gitconfig ~/.gitconfig")
-    name = input("Full name for git: ")
-    email = input("Email for git: ")
-    runsh(f"git config --global user.name {name}")
-    runsh(f"git config --global user.email {email}")
+    if not checkers.path_exists("~/.gitconfig.local"):
+        name = input("Full name for git: ")
+        email = input("Email for git: ")
+
+        with open(Path("~/.gitconfig.local").expanduser(), "w") as f:
+            f.write(f"[user]\n\tname = {name}\n\temail = {email}\n")
 
 
 def keymapper_setup():
@@ -273,7 +274,7 @@ def python_setup():
         runsh(f"curl -sSL {poetry_url} | python -")
     else:
         logging.info("Skipping Poetry install")
-    
+
     install("httpie")
 
 

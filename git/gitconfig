@@ -1,17 +1,20 @@
 [alias]
-fap = fetch --all --prune
-
-[default]
-editor = vim
+	fap = fetch --all --prune
 
 [core]
-editor = vim
+	editor = vim
+
+[default]
+	editor = vim
 
 [difftool]
-prompt = false
+	prompt = false
+
+[include]
+    path = ~/.gitconfig.local
 
 [mergetool]
-prompt = false
+	prompt = false
 
 [push]
-default = current
+	default = current
