@@ -6,6 +6,7 @@ import subprocess
 
 import checkers
 
+PKG_MANAGER = "aptitude"
 timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
 
 

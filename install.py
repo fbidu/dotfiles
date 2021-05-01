@@ -9,8 +9,6 @@ from shell import install, set_dconf_key, sys_update, sys_upgrade, runsh
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
-PKG_MANAGER = "aptitude"
-
 # Are we on Linux Mint?
 ON_MINT = (
     subprocess.check_output(["lsb_release", "-is"], encoding="utf-8")[:-1]
@@ -123,21 +121,21 @@ def pyenv_setup():
     """
     python_build_deps = (
         "build-essential",
-        "libssl-dev",
-        "zlib1g-dev",
-        "libbz2-dev",
-        "libreadline-dev",
-        "libsqlite3-dev",
-        "wget",
         "curl",
-        "llvm",
-        "libncurses5-dev",
-        "libncursesw5-dev",
-        "xz-utils",
-        "tk-dev",
+        "libbz2-dev",
         "libffi-dev",
         "liblzma-dev",
+        "libncurses5-dev",
+        "libncursesw5-dev",
+        "libreadline-dev",
+        "libsqlite3-dev",
+        "libssl-dev",
+        "llvm",
         "python-openssl",
+        "tk-dev",
+        "wget",
+        "xz-utils",
+        "zlib1g-dev",
     )
     install(*python_build_deps)
     runsh("git clone https://github.com/pyenv/pyenv.git ~/.pyenv")
@@ -250,12 +248,32 @@ def vscode_setup():
 
 
 def python_setup():
-    to_install = {"black"}
+    poetry_url = (
+        "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+    )
+    to_install = {
+        "black",
+        "ipython",
+        "jupyterlab",
+        "notebook",
+        "numpy",
+        "pandas",
+        "pre-commit",
+        "pytest",
+    }
 
     for package in to_install:
         if checkers.command_available(package):
             logging.info(f"Skipping {package} installation")
         runsh(f"pip install --user {package}")
+
+    if not checkers.command_available("poetry"):
+        logging.info("Installing Poetry")
+        runsh(f"curl -sSL {poetry_url} | python -")
+    else:
+        logging.info("Skipping Poetry install")
+    
+    install("httpie")
 
 
 def cinnamon_setup():
