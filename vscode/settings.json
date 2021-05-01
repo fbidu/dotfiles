@@ -1,0 +1,44 @@
+{
+    "workbench.colorTheme": "City Lights",
+    "editor.fontFamily": "'SauceCodePro Nerd Font'",
+    "editor.fontSize": 18,
+    "python.languageServer": "Pylance",
+    "editor.fontLigatures": true,
+    "editor.rulers": [
+        80,
+        100
+    ],
+    "[markdown]": {
+        "editor.defaultFormatter": "mervin.markdown-formatter"
+    },
+    "terminal.integrated.inheritEnv": false,
+    "files.eol": "\n",
+    "terminal.integrated.fontFamily": "'SauceCodePro Nerd Font'",
+    "python.formatting.provider": "black",
+    "jupyter.sendSelectionToInteractiveWindow": true,
+    "tabnine.experimentalAutoImports": true,
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "autoDocstring.docstringFormat": "sphinx",
+    "autoDocstring.startOnNewLine": true,
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter-notebook",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "asciidoc.wkhtmltopdf_path": "/usr/bin/wkhtmltopdf",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "explorer.confirmDelete": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "go.toolsManagement.autoUpdate": true
+}

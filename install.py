@@ -206,16 +206,46 @@ def vscode_setup():
     url = (
         "https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
     )
-    extensions = {"ms-python.python", "ms-toolsai.jupyter"}
+    extensions = {
+        "asciidoctor.asciidoctor-vscode",
+        "batisteo.vscode-django",
+        "bierner.emojisense",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "foxundermoon.shell-format",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode-remote.remote-ssh-edit",
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "ms-vsliveshare.vsliveshare-audio",
+        "ms-vsliveshare.vsliveshare-pack",
+        "ms-vsliveshare.vsliveshare",
+        "njpwerner.autodocstring",
+        "pkief.material-icon-theme",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "techer.open-in-browser",
+        "vscode-icons-team.vscode-icons",
+        "wakatime.vscode-wakatime",
+        "yummygum.city-lights-theme",
+    }
     to_install = extensions - checkers.installed_vscode_extensions()
 
     if not checkers.command_available("code"):
         runsh(f"wget -nc --trust-server-names {url} -P /tmp")
         runsh("sudo gdebi /tmp/code_*_amd64.deb -n")
 
-    for extension in extensions:
+    for extension in to_install:
         logging.info(f"Installing vscode extension {extension}")
         runsh(f"code --install-extension {extension}")
+
+    runsh("mv ~/.config/Code/User/ ~/.config/Code/User_backup")
+    runsh("ln -sfn ~/dotfiles/vscode/ ~/.config/Code/User")
 
 
 def python_setup():

@@ -26,4 +26,4 @@ def user_shell_is(shell):
 def installed_vscode_extensions():
     output = runsh("code --list-extensions", capture_output=True).stdout
     output = output.decode("utf-8")
-    return set(output.split("\n")[:-1])
+    return set(ext.lower() for ext in output.split("\n")[:-1])
