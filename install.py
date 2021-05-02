@@ -282,6 +282,13 @@ def cinnamon_setup():
     set_dconf_key("/org/cinnamon/desktop/wm/preferences/focus-mode", "\"'sloppy'\"")
 
 
+def franz_setup():
+    url = "https://github.com/meetfranz/franz/releases/download/v5.6.1/franz_5.6.1_amd64.deb"
+    if not checkers.command_available("franz"):
+        runsh(f"wget -nc {url} -P /tmp")
+        runsh("sudo gdebi /tmp/franz_*_amd64.deb -n")
+
+
 if __name__ == "__main__":
     sys_update()
     sys_upgrade()
@@ -296,3 +303,4 @@ if __name__ == "__main__":
     vscode_setup()
     python_setup()
     cinnamon_setup()
+    franz_setup()
