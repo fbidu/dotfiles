@@ -40,5 +40,6 @@
             "viewType": "jupyter-notebook"
         }
     ],
-    "workbench.iconTheme": "vscode-icons"
+    "workbench.iconTheme": "vscode-icons",
+    "material-icon-theme.showWelcomeMessage": false
 }
