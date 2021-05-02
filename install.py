@@ -187,6 +187,7 @@ def dslr_setup():
 
 def git_setup():
     runsh("ln -sfn ~/dotfiles/git/gitconfig ~/.gitconfig")
+    runsh("ln -sfn ~/dotfiles/git/global.gitignore ~/.gitignore")
     if not checkers.path_exists("~/.gitconfig.local"):
         name = input("Full name for git: ")
         email = input("Email for git: ")
