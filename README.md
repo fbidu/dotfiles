@@ -1,5 +1,11 @@
 # Dotfiles and Stuff
 
+**Pretty Alpha stuff here. Not suitable for general usage yet**
+
+```
+wget https://github.com/fbidu/dotfiles/archive/refs/heads/main.zip && unzip main.zip && mv dotfiles-main dotfiles
+```
+
 ## Whishlist
 
 * [x] Update the whole system with aptitude
