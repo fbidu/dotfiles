@@ -30,7 +30,10 @@ def installed_vscode_extensions():
 
 
 def symlink(path, target_path):
+    link = Path(path).expanduser().readlink()
+    target = Path(target_path).expanduser()
+
     try:
-        return Path(path).expanduser().readlink() == target_path
+        return link == target
     except Exception:
         return False

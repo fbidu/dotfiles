@@ -8,5 +8,5 @@ def test_git_installed():
 
 def test_gitconfig_symlinked():
     assert checkers.symlink(
-        Path("~/.gitconfig"), Path("/home/fbidu/dotfiles/git/gitconfig")
+        Path("~/.gitconfig"), Path("~/dotfiles/git/gitconfig")
     )
