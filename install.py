@@ -256,6 +256,7 @@ def python_setup():
     )
     to_install = {
         "black",
+        "cookiecutter",
         "ipython",
         "jupyterlab",
         "notebook",
