@@ -2,7 +2,7 @@
 
 **Pretty Alpha stuff here. Not suitable for general usage yet**
 
-```
+```bash
 wget https://github.com/fbidu/dotfiles/archive/refs/heads/main.zip && unzip main.zip && mv dotfiles-main dotfiles
 ```
 
