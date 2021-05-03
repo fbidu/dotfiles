@@ -3,8 +3,8 @@ from pathlib import Path
 import platform
 import subprocess
 
-import checkers
-from shell import install, set_dconf_key, sys_update, sys_upgrade, runsh
+from . import checkers
+from .shell import install, set_dconf_key, sys_update, sys_upgrade, runsh
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 

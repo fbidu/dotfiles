@@ -1,4 +1,4 @@
-from .install import *
+from dotfiles.install import *
 
 if __name__ == "__main__":
     sys_update()

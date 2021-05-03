@@ -1,5 +1,5 @@
 from pathlib import Path
-from .. import checkers
+from dotfiles import checkers
 
 
 def test_git_installed():
