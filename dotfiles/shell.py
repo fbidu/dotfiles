@@ -1,10 +1,7 @@
-from datetime import datetime, time
-from functools import partial
+from datetime import datetime
 import logging
-import platform
 import subprocess
 
-import checkers
 
 PKG_MANAGER = "aptitude"
 timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")

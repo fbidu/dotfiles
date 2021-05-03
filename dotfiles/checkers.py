@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess
-from shell import runsh
+from .shell import runsh
 
 
 def command_available(command):
@@ -27,3 +27,10 @@ def installed_vscode_extensions():
     output = runsh("code --list-extensions", capture_output=True).stdout
     output = output.decode("utf-8")
     return set(ext.lower() for ext in output.split("\n")[:-1])
+
+
+def symlink(path, target_path):
+    try:
+        return Path(path).expanduser().readlink() == target_path
+    except Exception:
+        return False
