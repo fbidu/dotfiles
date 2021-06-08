@@ -1,4 +1,8 @@
 {
+    "[django-html]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
+    },
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
@@ -9,7 +13,11 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[markdown]": {
-        "editor.defaultFormatter": "mervin.markdown-formatter"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnSave": true
     },
     "[yaml]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -41,5 +49,12 @@
         }
     ],
     "workbench.iconTheme": "vscode-icons",
-    "material-icon-theme.showWelcomeMessage": false
+    "material-icon-theme.showWelcomeMessage": false,
+    "editor.quickSuggestionsDelay": 100,
+    "terminal.integrated.fontSize": 18,
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "terminal.integrated.lineHeight": 1.3,
+    "window.zoomLevel": 2
 }
