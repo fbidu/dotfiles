@@ -8,7 +8,7 @@ PKG_MANAGER = "apt-get"
 
 def timestamp():
     """Returns the current date time in the format YYYY_MM_DD_HHhMMminSS"""
-    datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
+    return datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
 
 
 def package_cmd(command, *args):
@@ -39,17 +39,17 @@ def package_cmd(command, *args):
 
 def install(*args):
     """Install packages using the configured package manager"""
-    package_cmd("install", *args)
+    return package_cmd("install", *args)
 
 
 def sys_update():
     """Updates the package manager's package lists"""
-    package_cmd("update")
+    return package_cmd("update")
 
 
 def sys_upgrade():
     """Upgrades the system"""
-    package_cmd("full-upgrade")
+    return package_cmd("full-upgrade")
 
 
 def runsh(*args, suppress=False, **kwargs):
