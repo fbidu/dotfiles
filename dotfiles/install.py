@@ -66,7 +66,7 @@ def install_fonts():
         logging.info(f"Font {font} installed")
 
     # Update system font cache
-    runsh("fc-cache -f -v")
+    runsh("fc-cache -f -v > /dev/null")
     logging.info("All fonts installed")
     set_dconf_key(f"{gterminal_profile}/font", f"\"'{default_font}'\"")
 
