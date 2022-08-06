@@ -163,7 +163,7 @@ def docker_setup():
     docker_key = "https://download.docker.com/linux/ubuntu/gpg"
     docker_keyring = "/usr/share/keyrings/docker-archive-keyring.gpg"
     docker_repo_list = "/etc/apt/sources.list.d/docker.list"
-    docker_compose_url = "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64"  # noqa #pylint: disable=line-too-long
+    docker_compose_url = "https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64"  # noqa #pylint: disable=line-too-long
     install(*docker_deps)
     runsh(f"curl -fsSL {docker_key} | sudo gpg --dearmor -o {docker_keyring}")
     runsh(
@@ -204,16 +204,16 @@ def git_setup():
             gitconfig.write(f"[user]\n\tname = {name}\n\temail = {email}\n")
 
 
-def keymapper_setup():
+def input_remapper_setup():
     """
-    Installs keymapper and setups its configuration
+    Installs Input Remapper and setups its configuration
 
-    https://github.com/sezanzeb/key-mapper/
+    https://github.com/sezanzeb/input-remapper
     """
-    url = "https://github.com/sezanzeb/key-mapper/releases/download/0.8.1/key-mapper-0.8.1.deb"
+    url = "https://github.com/sezanzeb/input-remapper/releases/download/1.5.0/input-remapper-1.5.0.deb"  # noqa pylint: disable=line-too-long
     runsh(f"wget -nc {url} -P /tmp")
-    runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
-    runsh("ln -sfn ~/dotfiles/key-mapper ~/.config/key-mapper")
+    runsh("sudo gdebi /tmp/input-remapper-1.5.0.deb -n")
+    runsh("ln -sfn ~/dotfiles/input-remapper ~/.config/input-remapper")
 
 
 def vscode_setup():
