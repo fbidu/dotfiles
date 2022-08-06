@@ -79,7 +79,7 @@ done
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf pyenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -87,4 +87,11 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#93A1A1"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+
+export PATH="$PATH:/home/fbidu/bin/flutter/bin:/home/fbidu/bin/android-studio/bin"
+export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+eval "$(direnv hook zsh)"
+
 export PATH="$HOME/.poetry/bin:$PATH"
+
+typeset -aU path
