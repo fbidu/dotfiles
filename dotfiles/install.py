@@ -134,7 +134,7 @@ def pyenv_setup():
         "libsqlite3-dev",
         "libssl-dev",
         "llvm",
-        "python-openssl",
+        "python3-openssl",
         "tk-dev",
         "wget",
         "xz-utils",
