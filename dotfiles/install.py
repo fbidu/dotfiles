@@ -116,6 +116,7 @@ def zsh_setup():
     if not checkers.user_shell_is("/usr/bin/zsh"):
         runsh("chsh -s $(which zsh)")
     logging.info("zsh installed")
+    runsh("source ~/.zshrc")
 
 
 def pyenv_setup():
@@ -143,6 +144,7 @@ def pyenv_setup():
     install(*python_build_deps)
     runsh("git clone https://github.com/pyenv/pyenv.git ~/.pyenv")
     runsh("cd ~/.pyenv && src/configure && make -C src")
+    runsh("source ~/.zshrc")
     runsh("pyenv install 3.10.5 -s")
     runsh("pyenv install 2.7.18 -s")
     runsh("pyenv global 3.10.5 2.7.18")
