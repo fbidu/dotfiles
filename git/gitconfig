@@ -1,5 +1,6 @@
 [alias]
 	fap = fetch --all --prune
+	pr = !sh -c \"git fetch upstream pull/${1}/head:pr_${1} && git checkout pr_${1}\" -
 
 [core]
 	editor = vim
@@ -19,3 +20,11 @@
 
 [push]
 	default = current
+[color]
+	ui = true
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential

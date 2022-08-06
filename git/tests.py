@@ -1,18 +1,22 @@
+"""Checks if the git installation was correct."""
 from pathlib import Path
 from uuid import uuid4
-import uuid
+
 from dotfiles import checkers, shell
 
 
 def test_git_installed():
+    """Checks if git is installed"""
     assert checkers.command_available("git")
 
 
 def test_gitconfig_symlinked():
+    """Checks if gitconfig is symlinked"""
     assert checkers.symlink(Path("~/.gitconfig"), Path("~/dotfiles/git/gitconfig"))
 
 
 def test_global_gitignore():
+    """Checks if global gitignore is symlinked and working"""
     test_folder = Path("/") / "tmp" / str(uuid4())
     included_file = str(uuid4())
     shell.runsh(
@@ -30,4 +34,4 @@ def test_global_gitignore():
     )
 
     assert included_file in output.stdout
-    assert not "env" in output.stdout
+    assert "env" not in output.stdout
