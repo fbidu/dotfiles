@@ -220,9 +220,7 @@ def vscode_setup():
     """
     Installs vscode, my favorite extensions, and sets up the configuration.
     """
-    url = (
-        r"https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
-    )
+    url = r"https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
     extensions = {
         "asciidoctor.asciidoctor-vscode",
         "batisteo.vscode-django",
@@ -316,7 +314,7 @@ def franz_setup():
     """
     Installs Franz
     """
-    url = "https://github.com/meetfranz/franz/releases/download/v5.6.1/franz_5.6.1_amd64.deb"
+    url = "https://github.com/meetfranz/franz/releases/download/v5.9.2/franz_5.9.2_amd64.deb"
     if not checkers.command_available("franz"):
         runsh(f"wget -nc {url} -P /tmp")
         runsh("sudo gdebi /tmp/franz_*_amd64.deb -n")
