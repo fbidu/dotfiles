@@ -143,9 +143,9 @@ def pyenv_setup():
     install(*python_build_deps)
     runsh("git clone https://github.com/pyenv/pyenv.git ~/.pyenv")
     runsh("cd ~/.pyenv && src/configure && make -C src")
-    runsh("pyenv install 3.9.1 -s")
+    runsh("pyenv install 3.10.5 -s")
     runsh("pyenv install 2.7.18 -s")
-    runsh("pyenv global 3.9.1 2.7.18")
+    runsh("pyenv global 3.10.5 2.7.18")
 
 
 def docker_setup():
