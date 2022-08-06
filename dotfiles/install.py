@@ -8,6 +8,7 @@ from pathlib import Path
 
 from . import checkers
 from .shell import install, runsh, set_dconf_key, sys_update
+from .symbolic_linker import SymbolicLinker
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
@@ -190,6 +191,7 @@ def dslr_setup():
 
 def git_setup():
     """Sets up the global gitconfig and gitignore files"""
+    install("git")
     runsh("ln -sfn ~/dotfiles/git/gitconfig ~/.gitconfig")
     runsh("ln -sfn ~/dotfiles/git/global.gitignore ~/.gitignore")
     if not checkers.path_exists("~/.gitconfig.local"):
@@ -261,7 +263,12 @@ def vscode_setup():
         runsh(f"code --install-extension {extension}")
 
     runsh("mv ~/.config/Code/User/ ~/.config/Code/User_backup")
-    runsh("ln -sfn ~/dotfiles/vscode/ ~/.config/Code/User")
+    runsh("mkdir -p ~/.config/Code/User")
+
+    linker = SymbolicLinker("~/dotfiles/vscode/", "~/.config/Code/User/")
+
+    for path in ["snippets", "keybindings.json", "settings.json"]:
+        linker.link(path)
 
 
 def python_setup():

@@ -9,7 +9,6 @@ from dotfiles.install import (
     dslr_setup,
     franz_setup,
     git_setup,
-    install,
     install_fonts,
     keymapper_setup,
     pyenv_setup,
@@ -26,17 +25,20 @@ if __name__ == "__main__":
         print("Skipping execution!")
         sys.exit(0)
 
-    sys_update()
-    sys_upgrade()
-    install("git")
-    install_fonts()
-    zsh_setup()
-    pyenv_setup()
-    docker_setup()
-    dslr_setup()
-    git_setup()
-    keymapper_setup()
-    vscode_setup()
-    python_setup()
-    cinnamon_setup()
-    franz_setup()
+    for command in [
+        sys_update,
+        sys_upgrade,
+        git_setup,
+        install_fonts,
+        zsh_setup,
+        pyenv_setup,
+        docker_setup,
+        dslr_setup,
+        keymapper_setup,
+        vscode_setup,
+        python_setup,
+        cinnamon_setup,
+        franz_setup,
+    ]:
+        if input(f"Run {command.__name__}? [y/n]: ") == "y":
+            command()

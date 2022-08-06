@@ -3,7 +3,7 @@ import logging
 import subprocess
 from datetime import datetime
 
-PKG_MANAGER = "aptitude"
+PKG_MANAGER = "apt-get"
 
 
 def timestamp():
@@ -49,7 +49,7 @@ def sys_update():
 
 def sys_upgrade():
     """Upgrades the system"""
-    package_cmd("dist-upgrade")
+    package_cmd("full-upgrade")
 
 
 def runsh(*args, suppress=False, **kwargs):
