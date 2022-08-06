@@ -1,10 +1,14 @@
-from datetime import datetime
+"""Utility functions to run shell commands"""
 import logging
 import subprocess
-
+from datetime import datetime
 
 PKG_MANAGER = "aptitude"
-timestamp = lambda: datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
+
+
+def timestamp():
+    """Returns the current date time in the format YYYY_MM_DD_HHhMMminSS"""
+    datetime.now().strftime("%Y_%m_%d_%Hh%Mmin%S.%f")
 
 
 def package_cmd(command, *args):
@@ -19,11 +23,13 @@ def package_cmd(command, *args):
 
     logging.info(f"Running {PKG_MANAGER} {command} {log_args}")
 
-    response = subprocess.run(
-        ["sudo", PKG_MANAGER, command, *args, "-y"],
-        stdout=open(logfile, "w"),
-        stderr=subprocess.STDOUT,
-    )
+    with open(logfile, "w", encoding="utf-8") as logfile_handle:
+        response = subprocess.run(
+            ["sudo", PKG_MANAGER, command, *args, "-y"],
+            stdout=logfile_handle,
+            stderr=subprocess.STDOUT,
+            check=True,
+        )
 
     if response.returncode != 0:
         logging.error(
@@ -31,13 +37,28 @@ def package_cmd(command, *args):
         )
 
 
-install = lambda *args: package_cmd("install", *args)
-sys_update = lambda: package_cmd("update")
-sys_upgrade = lambda: package_cmd("dist-upgrade")
+def install(*args):
+    """Install packages using the configured package manager"""
+    package_cmd("install", *args)
+
+
+def sys_update():
+    """Updates the package manager's package lists"""
+    package_cmd("update")
+
+
+def sys_upgrade():
+    """Upgrades the system"""
+    package_cmd("dist-upgrade")
 
 
 def runsh(*args, suppress=False, **kwargs):
-    response = subprocess.run(*args, **kwargs, shell=True)
+    """
+    Runs a shell command and returns the response
+
+    If `suppress` is True and the command errors out, no logs are written.
+    """
+    response = subprocess.run(*args, **kwargs, shell=True, check=False)
     if response.returncode != 0 and not suppress:
         logging.error(f"Shell command errored. Args: {', '.join(args)}")
     return response

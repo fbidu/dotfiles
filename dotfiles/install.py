@@ -1,10 +1,13 @@
+"""
+This module includes functions to install softwares and files necessary for my setup.
+"""
 import logging
-from pathlib import Path
 import platform
 import subprocess
+from pathlib import Path
 
 from . import checkers
-from .shell import install, set_dconf_key, sys_update, sys_upgrade, runsh
+from .shell import install, runsh, set_dconf_key, sys_update
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
@@ -57,7 +60,7 @@ def install_fonts():
 
     for font in fonts:
         url = f"{nerd_fonts_url}{font}"
-        logging.info(f"Downloading {font.split('/')[0]}")
+        logging.info(f"Downloading {font.split('/', maxsplit=1)[0]}")
         runsh(f"wget -nc {url} -P ~/.local/share/fonts")
         logging.info(f"Font {font} installed")
 
@@ -86,7 +89,7 @@ def zsh_setup():
     plugins = {
         "themes/powerlevel10k": "https://github.com/romkatv/powerlevel10k.git",
         "plugins/zsh-autosuggestions": "https://github.com/zsh-users/zsh-autosuggestions",
-        "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",
+        "plugins/zsh-syntax-highlighting": "https://github.com/zsh-users/zsh-syntax-highlighting.git",  # noqa pylint: disable=line-too-long
     }
     deps = []
 
@@ -159,12 +162,12 @@ def docker_setup():
     docker_key = "https://download.docker.com/linux/ubuntu/gpg"
     docker_keyring = "/usr/share/keyrings/docker-archive-keyring.gpg"
     docker_repo_list = "/etc/apt/sources.list.d/docker.list"
-    docker_compose_url = "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64"
+    docker_compose_url = "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64"  # noqa #pylint: disable=line-too-long
     install(*docker_deps)
     runsh(f"curl -fsSL {docker_key} | sudo gpg --dearmor -o {docker_keyring}")
     runsh(
         f"""echo "deb [arch=amd64 signed-by={docker_keyring}] https://download.docker.com/linux/ubuntu \
-        {UBUNTU_CODENAME} stable" | sudo tee {docker_repo_list}  > /dev/null"""
+        {UBUNTU_CODENAME} stable" | sudo tee {docker_repo_list}  > /dev/null"""  # noqa pylint: disable=line-too-long
     )
     sys_update()
     install("docker-ce", "docker-ce-cli", "containerd.io")
@@ -186,17 +189,25 @@ def dslr_setup():
 
 
 def git_setup():
+    """Sets up the global gitconfig and gitignore files"""
     runsh("ln -sfn ~/dotfiles/git/gitconfig ~/.gitconfig")
     runsh("ln -sfn ~/dotfiles/git/global.gitignore ~/.gitignore")
     if not checkers.path_exists("~/.gitconfig.local"):
         name = input("Full name for git: ")
         email = input("Email for git: ")
 
-        with open(Path("~/.gitconfig.local").expanduser(), "w") as f:
-            f.write(f"[user]\n\tname = {name}\n\temail = {email}\n")
+        with open(
+            Path("~/.gitconfig.local").expanduser(), "w", encoding="utf-8"
+        ) as gitconfig:
+            gitconfig.write(f"[user]\n\tname = {name}\n\temail = {email}\n")
 
 
 def keymapper_setup():
+    """
+    Installs keymapper and setups its configuration
+
+    https://github.com/sezanzeb/key-mapper/
+    """
     url = "https://github.com/sezanzeb/key-mapper/releases/download/0.8.1/key-mapper-0.8.1.deb"
     runsh(f"wget -nc {url} -P /tmp")
     runsh("sudo gdebi /tmp/key-mapper-0.8.1.deb -n")
@@ -204,8 +215,11 @@ def keymapper_setup():
 
 
 def vscode_setup():
+    """
+    Installs vscode, my favorite extensions, and sets up the configuration.
+    """
     url = (
-        "https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
+        r"https://code.visualstudio.com/sha/download\?build\=stable\&os\=linux-deb-x644"
     )
     extensions = {
         "asciidoctor.asciidoctor-vscode",
@@ -251,6 +265,7 @@ def vscode_setup():
 
 
 def python_setup():
+    """Installs my favorite python tools"""
     poetry_url = (
         "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
     )
@@ -281,11 +296,19 @@ def python_setup():
 
 
 def cinnamon_setup():
+    """
+    Sets up cinnamon to:
+    - have 'sloppy' mouse focus
+    - do not make that terrible sound while switching workspaces
+    """
     set_dconf_key("/org/cinnamon/desktop/wm/preferences/focus-mode", "\"'sloppy'\"")
     set_dconf_key("/org/cinnamon/sounds/switch-enabled", "false")
 
 
 def franz_setup():
+    """
+    Installs Franz
+    """
     url = "https://github.com/meetfranz/franz/releases/download/v5.6.1/franz_5.6.1_amd64.deb"
     if not checkers.command_available("franz"):
         runsh(f"wget -nc {url} -P /tmp")
