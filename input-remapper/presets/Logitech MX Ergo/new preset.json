@@ -1,7 +1,16 @@
 {
     "mapping": {
-        "1,276,1": "key_enter",
-        "2,6,-1": "key_up",
-        "2,6,1": "key_down"
+        "1,276,1": [
+            "key_enter",
+            "keyboard"
+        ],
+        "2,6,-1": [
+            "key_up",
+            "keyboard"
+        ],
+        "2,6,1": [
+            "key_down",
+            "keyboard"
+        ]
     }
 }

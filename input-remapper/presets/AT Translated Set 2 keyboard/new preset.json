@@ -1,11 +1,11 @@
 {
     "mapping": {
-        "1,58,1": [
-            "key_leftctrl",
+        "1,29,1": [
+            "Caps_Lock",
             "keyboard"
         ],
-        "1,29,1": [
-            "caps_lock",
+        "1,58,1": [
+            "Control_L",
             "keyboard"
         ]
     }
