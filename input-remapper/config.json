@@ -1,7 +1,8 @@
 {
     "autoload": {
         "Logitech G512 RGB MECHANICAL GAMING KEYBOARD": "new preset",
-        "Logitech MX Ergo": "new preset"
+        "Logitech MX Ergo": "new preset",
+        "AT Translated Set 2 keyboard": "new preset"
     },
     "macros": {
         "keystroke_sleep_ms": 10

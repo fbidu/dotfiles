@@ -61,12 +61,14 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pylintEnabled": true,
   "python.sortImports.args": ["--atomic", "--profile", "black"],
+  "python.testing.autoTestDiscoverOnSaveEnabled": false,
   "redhat.telemetry.enabled": true,
   "tabnine.experimentalAutoImports": true,
   "terminal.integrated.fontFamily": "'SauceCodePro Nerd Font'",
   "terminal.integrated.fontSize": 18,
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.lineHeight": 1.3,
+  "window.zoomLevel": 1,
   "workbench.colorTheme": "Dracula Soft",
   "workbench.iconTheme": "vscode-icons",
   "workbench.editorAssociations": {
@@ -77,6 +79,7 @@
     "default": "right",
     "jupyter-notebook": "left"
   },
+
   "github.copilot.enable": {
     "*": true,
     "yaml": false,
